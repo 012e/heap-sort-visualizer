@@ -1,6 +1,4 @@
-import os
 from pathlib import Path
-from dataclasses import dataclass
 
 history = []
 
@@ -77,8 +75,10 @@ def heapSort(a: list[int], n: int, i: int):
 
     history.append(a.copy())
     for i in range(n - 1, 0, -1):
+        history.append((a[: i + 1]).copy())
         a[i], a[0] = a[0], a[i]
         history.append((a[: i + 1]).copy())
+        history.append((a[:i]).copy())
         heapify(a, i, 0)
         count += 1
         history.append((a[:i]).copy())
@@ -104,7 +104,6 @@ for i in range(1, len(history)):
     # print("diff:", diff)
     with open(f"{OUTPUT_DIR}/heap{i:02d}.d2", "w") as f:
         if len(diff) == 2 and sorted(diff) == sorted([history[i][0], history[i][-1]]):
-            print("export swap")
             f.write(export_swap(history[i], 0))
         else:
             f.write(export(history[i], 0, diff))
